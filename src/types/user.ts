@@ -1,6 +1,6 @@
 export type User = {
   id: number;
   name: string;
-  gender: string;
+  gender: "female" | "male" | "other";
   banned: boolean;
-}
+};
