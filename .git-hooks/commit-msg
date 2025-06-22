@@ -1,17 +1,15 @@
 #!/usr/bin/env node
 
-const fs = require('fs');
+import fs from 'fs/promises';
+import process from 'process';
 
 const conventionalCommitMessageRegExp = /^(BREAKING CHANGE|build|chore|ci|docs|feat|fix|perf|refactor|revert|style|test){1}(\([\w\-\.]+\))?(!)?: ([\w ])+([\s\S]*)/g;
-let exitCode = 0;
+
 const commitMsgFile = process.argv[2];
-const message = fs.readFileSync(commitMsgFile, 'utf8');
+const message = await fs.readFile(commitMsgFile, 'utf8');
 const isValid = conventionalCommitMessageRegExp.test(message);
 
-if(!isValid) {
-   console.log('Cannot commit: the commit message does not comply with conventional commits standards.');
-   exitCode = 1;
+if (!isValid) {
+  console.log('Cannot commit: the commit message does not comply with conventional commits standards.');
+  process.exit(1);
 }
-
-process.exit(exitCode);
-
