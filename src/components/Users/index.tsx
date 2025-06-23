@@ -2,6 +2,7 @@ import { useFetchUsers } from "../../hooks/useUsers";
 import { createColumnHelper } from "@tanstack/react-table";
 import type { User } from "../../types/user";
 import DataTable from "../DataTable";
+import NavigationHeader from "../NavigationHeader";
 
 const columnHelper = createColumnHelper<User>();
 const columns = [
@@ -24,14 +25,16 @@ function Users() {
   const { data: users = [], isFetching, isError, error } = useFetchUsers();
 
   return (
-    <DataTable
-      heading="Users"
-      data={users}
-      columns={columns}
-      isFetching={isFetching}
-      isError={isError}
-      error={error}
-    />
+    <>
+      <NavigationHeader heading="Users" />
+      <DataTable
+        data={users}
+        columns={columns}
+        isFetching={isFetching}
+        isError={isError}
+        error={error}
+      />
+    </>
   );
 }
 

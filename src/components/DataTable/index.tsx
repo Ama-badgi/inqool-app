@@ -4,10 +4,8 @@ import {
   useReactTable,
 } from "@tanstack/react-table";
 import type { ColumnDef } from "@tanstack/react-table";
-import { Link } from "react-router";
 
 type DataTableProps<T> = {
-  heading: string;
   data: T[];
   columns: ColumnDef<T, any>[];
   isFetching: boolean;
@@ -16,7 +14,6 @@ type DataTableProps<T> = {
 };
 
 function DataTable<T>({
-  heading,
   data,
   columns,
   isFetching,
@@ -34,8 +31,6 @@ function DataTable<T>({
 
   return (
     <>
-      <Link to="/">Home</Link>
-      <h1>{heading}</h1>
       <table>
         <thead>
           {table.getHeaderGroups().map((headerGroup) => (

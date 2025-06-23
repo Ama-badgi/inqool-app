@@ -2,6 +2,7 @@ import { useFetchAnimals } from "../../hooks/useAnimals";
 import { createColumnHelper } from "@tanstack/react-table";
 import type { Animal } from "../../types/animal";
 import DataTable from "../DataTable";
+import NavigationHeader from "../NavigationHeader";
 
 const columnHelper = createColumnHelper<Animal>();
 const columns = [
@@ -23,14 +24,16 @@ function Animals() {
   const { data: animals = [], isFetching, isError, error } = useFetchAnimals();
 
   return (
-    <DataTable
-      heading="Animals"
-      columns={columns}
-      data={animals}
-      isFetching={isFetching}
-      isError={isError}
-      error={error}
-    />
+    <>
+      <NavigationHeader heading="Animals" />
+      <DataTable
+        columns={columns}
+        data={animals}
+        isFetching={isFetching}
+        isError={isError}
+        error={error}
+      />
+    </>
   );
 }
 
