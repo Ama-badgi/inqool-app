@@ -7,19 +7,15 @@ const columnHelper = createColumnHelper<Animal>();
 const columns = [
   columnHelper.accessor("id", {
     header: "ID",
-    footer: (info) => info.column.id,
   }),
   columnHelper.accessor("name", {
     header: "Name",
-    footer: (info) => info.column.id,
   }),
   columnHelper.accessor("type", {
     header: "Type",
-    footer: (info) => info.column.id,
   }),
   columnHelper.accessor("age", {
     header: "Age",
-    footer: (info) => info.column.id,
   }),
 ];
 

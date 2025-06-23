@@ -7,20 +7,16 @@ const columnHelper = createColumnHelper<User>();
 const columns = [
   columnHelper.accessor("id", {
     header: "ID",
-    footer: (info) => info.column.id,
   }),
   columnHelper.accessor("name", {
     header: "Name",
-    footer: (info) => info.column.id,
   }),
   columnHelper.accessor("gender", {
     header: "Gender",
-    footer: (info) => info.column.id,
   }),
   columnHelper.accessor("banned", {
     header: "Banned",
     cell: (info) => (info.getValue() ? "✅ Yes" : "❌ No"),
-    footer: (info) => info.column.id,
   }),
 ];
 
