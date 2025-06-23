@@ -2,7 +2,7 @@ import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router";
 import Home from "./Home";
 import Users from "./components/Users";
-import Animals from "./Animals";
+import Animals from "./components/Animals";
 
 function App() {
   return (

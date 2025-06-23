@@ -1,9 +1,9 @@
-import { useFetchUsers } from "../../hooks/useUsers";
+import { useFetchAnimals } from "../../hooks/useAnimals";
 import { createColumnHelper } from "@tanstack/react-table";
-import type { User } from "../../types/user";
+import type { Animal } from "../../types/animal";
 import DataTable from "../DataTable";
 
-const columnHelper = createColumnHelper<User>();
+const columnHelper = createColumnHelper<Animal>();
 const columns = [
   columnHelper.accessor("id", {
     header: "ID",
@@ -13,25 +13,24 @@ const columns = [
     header: "Name",
     footer: (info) => info.column.id,
   }),
-  columnHelper.accessor("gender", {
-    header: "Gender",
+  columnHelper.accessor("type", {
+    header: "Type",
     footer: (info) => info.column.id,
   }),
-  columnHelper.accessor("banned", {
-    header: "Banned",
-    cell: (info) => (info.getValue() ? "✅ Yes" : "❌ No"),
+  columnHelper.accessor("age", {
+    header: "Age",
     footer: (info) => info.column.id,
   }),
 ];
 
-function Users() {
-  const { data: users = [], isFetching, isError, error } = useFetchUsers();
+function Animals() {
+  const { data: animals = [], isFetching, isError, error } = useFetchAnimals();
 
   return (
     <DataTable
-      heading="Users"
-      data={users}
+      heading="Animals"
       columns={columns}
+      data={animals}
       isFetching={isFetching}
       isError={isError}
       error={error}
@@ -39,4 +38,4 @@ function Users() {
   );
 }
 
-export default Users;
+export default Animals;
