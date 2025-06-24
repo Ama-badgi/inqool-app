@@ -1,8 +1,10 @@
-import { useFetchUsers } from "../../hooks/useUsers";
+import { useFetchUsers } from "../../../hooks/useUsers";
 import { createColumnHelper } from "@tanstack/react-table";
-import type { User } from "../../types/user";
+import type { User } from "../../../types/user";
 import DataTable from "../DataTable";
-import NavigationHeader from "../NavigationHeader";
+import NavigationHeader from "../../NavigationHeader";
+import UserForm from "../../forms/UserForm";
+import { useState } from "react";
 
 const columnHelper = createColumnHelper<User>();
 const columns = [
@@ -22,11 +24,14 @@ const columns = [
 ];
 
 function Users() {
+  const [showForm, setShowForm] = useState(false);
   const { data: users = [], isFetching, isError, error } = useFetchUsers();
 
   return (
     <>
       <NavigationHeader heading="Users" />
+      <button onClick={() => setShowForm(true)}>+</button>
+      {showForm && <UserForm onClose={() => setShowForm(false)} />}
       <DataTable
         data={users}
         columns={columns}
