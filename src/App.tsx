@@ -1,8 +1,8 @@
 import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router";
 import Home from "./Home";
-import Users from "./components/tables/Users";
-import Animals from "./components/tables/Animals";
+import Users from "./components/entityPages/Users";
+import Animals from "./components/entityPages/Animals";
 
 function App() {
   return (

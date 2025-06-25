@@ -1,10 +1,10 @@
 import { useFetchUsers } from "../../../hooks/useUsers";
 import { createColumnHelper } from "@tanstack/react-table";
 import type { User } from "../../../types/user";
-import DataTable from "../DataTable";
-import NavigationHeader from "../../NavigationHeader";
+import DataTable from "../../DataTable";
 import UserForm from "../../forms/UserForm";
-import { useState } from "react";
+import EntityPage from "../EntityPage";
+import { TbPencil, TbHammer, TbHammerOff } from "react-icons/tb";
 
 const columnHelper = createColumnHelper<User>();
 const columns = [
@@ -21,20 +21,32 @@ const columns = [
     header: "Banned",
     cell: (info) => (info.getValue() ? "✅ Yes" : "❌ No"),
   }),
+  columnHelper.display({
+    id: "actions",
+    header: "",
+    cell: ({ row }) => {
+      const user = row.original;
+      return (
+        <div>
+          <button>
+            <TbPencil />
+          </button>
+          <button>{user.banned ? <TbHammerOff /> : <TbHammer />}</button>
+        </div>
+      );
+    },
+  }),
 ];
 
 function Users() {
-  const [showForm, setShowForm] = useState(false);
   const { data: users = [], isFetching, isError, error } = useFetchUsers();
 
   return (
     <>
-      <NavigationHeader heading="Users" />
-      <button onClick={() => setShowForm(true)}>+</button>
-      {showForm && <UserForm onClose={() => setShowForm(false)} />}
-      <DataTable
-        data={users}
-        columns={columns}
+      <EntityPage
+        heading="Users"
+        FormComponent={UserForm}
+        children={<DataTable data={users} columns={columns} />}
         isFetching={isFetching}
         isError={isError}
         error={error}

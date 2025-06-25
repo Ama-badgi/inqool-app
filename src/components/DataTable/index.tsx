@@ -8,26 +8,14 @@ import type { ColumnDef } from "@tanstack/react-table";
 type DataTableProps<T> = {
   data: T[];
   columns: ColumnDef<T, any>[];
-  isFetching: boolean;
-  isError: boolean;
-  error: Error | null;
 };
 
-function DataTable<T>({
-  data,
-  columns,
-  isFetching,
-  isError,
-  error,
-}: DataTableProps<T>) {
+function DataTable<T>({ data, columns }: DataTableProps<T>) {
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
-
-  if (isFetching) return <>Loading...</>;
-  if (isError) return <>Error: {error?.message}</>;
 
   return (
     <>
