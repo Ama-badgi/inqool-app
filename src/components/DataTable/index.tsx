@@ -1,22 +1,11 @@
-import {
-  flexRender,
-  getCoreRowModel,
-  useReactTable,
-} from "@tanstack/react-table";
-import type { ColumnDef } from "@tanstack/react-table";
+import { flexRender } from "@tanstack/react-table";
+import type { Table } from "@tanstack/react-table";
 
 type DataTableProps<T> = {
-  data: T[];
-  columns: ColumnDef<T, any>[];
+  table: Table<T>;
 };
 
-function DataTable<T>({ data, columns }: DataTableProps<T>) {
-  const table = useReactTable({
-    data,
-    columns,
-    getCoreRowModel: getCoreRowModel(),
-  });
-
+function DataTable<T>({ table }: DataTableProps<T>) {
   return (
     <>
       <table>

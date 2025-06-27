@@ -1,10 +1,18 @@
 import { useFetchUsers } from "../../../hooks/useUsers";
-import { createColumnHelper } from "@tanstack/react-table";
+import {
+  createColumnHelper,
+  getCoreRowModel,
+  getFilteredRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
 import type { User } from "../../../types/user";
 import DataTable from "../../DataTable";
 import UserForm from "../../forms/UserForm";
 import EntityPage from "../EntityPage";
 import { TbPencil, TbHammer, TbHammerOff } from "react-icons/tb";
+import Filters from "../../filters/Filters";
+import NameFilter from "../../filters/NameFilter";
+import { useNameFilter } from "../../../hooks/useNameFilter";
 
 const columnHelper = createColumnHelper<User>();
 const columns = [
@@ -41,17 +49,35 @@ const columns = [
 function Users() {
   const { data: users = [], isFetching, isError, error } = useFetchUsers();
 
+  const { nameFilter, setNameFilter, columnFilters, setColumnFilters } =
+    useNameFilter();
+
+  const table = useReactTable({
+    data: users,
+    columns,
+    state: {
+      columnFilters,
+    },
+    onColumnFiltersChange: setColumnFilters,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+  });
+
   return (
-    <>
-      <EntityPage
-        heading="Users"
-        FormComponent={UserForm}
-        children={<DataTable data={users} columns={columns} />}
-        isFetching={isFetching}
-        isError={isError}
-        error={error}
-      />
-    </>
+    <EntityPage
+      heading="Users"
+      FormComponent={UserForm}
+      isFetching={isFetching}
+      isError={isError}
+      error={error}
+      filters={
+        <Filters>
+          <NameFilter value={nameFilter} onChange={setNameFilter} />
+        </Filters>
+      }
+    >
+      <DataTable table={table} />
+    </EntityPage>
   );
 }
 

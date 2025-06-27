@@ -1,10 +1,10 @@
 import { useState } from "react";
 import NavigationHeader from "../../NavigationHeader";
-import Filters from "../../Filters";
 
 type EntityPageProps = {
   heading: string;
   FormComponent: React.ComponentType<{ onClose: () => void }>;
+  filters?: React.ReactNode;
   children: React.ReactNode;
   isFetching: boolean;
   isError: boolean;
@@ -18,6 +18,7 @@ function EntityPage({
   isFetching,
   isError,
   error,
+  filters,
 }: EntityPageProps) {
   if (isError) return <>Error: {error?.message}</>;
 
@@ -34,7 +35,7 @@ function EntityPage({
       {!isFetching && !isError && (
         <>
           <button onClick={() => setShowFilters(!showFilters)}>Filters</button>
-          {showFilters && <Filters />}
+          {showFilters && filters}
           {children}
           {showForm ? (
             <FormComponent onClose={() => setShowForm(false)} />
