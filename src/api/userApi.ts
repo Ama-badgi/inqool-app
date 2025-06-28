@@ -16,3 +16,14 @@ export const postUser = async (formData: UserFormData) => {
   });
   return response.data;
 };
+
+export const patchUserDetails = (
+  id: string,
+  updatedData: Partial<UserFormData>
+) => {
+  return axiosInstance.patch(`${USERS_URL}/${id}`, updatedData);
+};
+
+export const patchUserBan = (id: string, banned: boolean) => {
+  return axiosInstance.patch(`${USERS_URL}/${id}`, { banned });
+};

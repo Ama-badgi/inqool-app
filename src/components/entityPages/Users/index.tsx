@@ -1,50 +1,24 @@
-import { useFetchUsers } from "../../../hooks/useUsers";
+import { useMemo, useState } from "react";
 import {
   createColumnHelper,
   getCoreRowModel,
   getFilteredRowModel,
+  getSortedRowModel,
   useReactTable,
+  type SortingState,
 } from "@tanstack/react-table";
-import type { User } from "../../../types/user";
-import DataTable from "../../DataTable";
-import UserForm from "../../forms/UserForm";
-import EntityPage from "../EntityPage";
 import { TbPencil, TbHammer, TbHammerOff } from "react-icons/tb";
+
+import type { User } from "../../../types/user";
+import { useFetchUsers, usePatchUserBan } from "../../../hooks/useUsers";
+import { useNameFilter } from "../../../hooks/useNameFilter";
+import EntityPage from "../EntityPage";
+import UserForm from "../../forms/UserForm";
+import DataTable from "../../DataTable";
 import Filters from "../../filters/Filters";
 import NameFilter from "../../filters/NameFilter";
-import { useNameFilter } from "../../../hooks/useNameFilter";
 
 const columnHelper = createColumnHelper<User>();
-const columns = [
-  columnHelper.accessor("id", {
-    header: "ID",
-  }),
-  columnHelper.accessor("name", {
-    header: "Name",
-  }),
-  columnHelper.accessor("gender", {
-    header: "Gender",
-  }),
-  columnHelper.accessor("banned", {
-    header: "Banned",
-    cell: (info) => (info.getValue() ? "✅ Yes" : "❌ No"),
-  }),
-  columnHelper.display({
-    id: "actions",
-    header: "",
-    cell: ({ row }) => {
-      const user = row.original;
-      return (
-        <div>
-          <button>
-            <TbPencil />
-          </button>
-          <button>{user.banned ? <TbHammerOff /> : <TbHammer />}</button>
-        </div>
-      );
-    },
-  }),
-];
 
 function Users() {
   const { data: users = [], isFetching, isError, error } = useFetchUsers();
@@ -52,15 +26,78 @@ function Users() {
   const { nameFilter, setNameFilter, columnFilters, setColumnFilters } =
     useNameFilter();
 
+  const { mutate: updateUserBan } = usePatchUserBan();
+
+  const [editingUserId, setEditingUserId] = useState<string | null>(null);
+  const [sorting, setSorting] = useState<SortingState>([
+    { id: "name", desc: false },
+  ]);
+
+  const columns = useMemo(
+    () => [
+      columnHelper.accessor("id", {
+        header: "ID",
+      }),
+      columnHelper.accessor("name", {
+        header: "Name",
+        cell: ({ row }) =>
+          row.original.id === editingUserId ? null : row.original.name,
+      }),
+      columnHelper.accessor("gender", {
+        header: "Gender",
+        cell: ({ row }) =>
+          row.original.id === editingUserId ? null : row.original.gender,
+      }),
+      columnHelper.accessor("banned", {
+        header: "Banned",
+        cell: ({ row }) =>
+          row.original.id === editingUserId
+            ? null
+            : row.original.banned
+            ? "✅ Yes"
+            : "❌ No",
+      }),
+      columnHelper.display({
+        id: "actions",
+        header: "",
+        cell: ({ row }) => {
+          const user = row.original;
+
+          if (editingUserId === user.id) {
+            return (
+              <UserForm user={user} onClose={() => setEditingUserId(null)} />
+            );
+          }
+
+          return (
+            <div>
+              <button onClick={() => setEditingUserId(user.id)}>
+                <TbPencil />
+              </button>
+              <button
+                onClick={() =>
+                  updateUserBan({ id: user.id, banned: !user.banned })
+                }
+              >
+                {user.banned ? <TbHammerOff /> : <TbHammer />}
+              </button>
+            </div>
+          );
+        },
+      }),
+    ],
+    [editingUserId, updateUserBan]
+  );
+
   const table = useReactTable({
     data: users,
     columns,
-    state: {
-      columnFilters,
-    },
+    state: { columnFilters, sorting },
     onColumnFiltersChange: setColumnFilters,
+    onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
   });
 
   return (

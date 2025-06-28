@@ -2,10 +2,12 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { userSchema } from "../../../schemas/userSchema";
 import type { UserFormData } from "../../../schemas/userSchema";
-import { usePostUser } from "../../../hooks/useUsers";
+import { usePatchUserDetails, usePostUser } from "../../../hooks/useUsers";
+import type { User } from "../../../types/user";
 
-function UserForm({ onClose }: { onClose: () => void }) {
-  const { mutate } = usePostUser();
+function UserForm({ onClose, user }: { onClose: () => void; user?: User }) {
+  const { mutate: createUser } = usePostUser();
+  const { mutate: updateUser } = usePatchUserDetails();
 
   const {
     register,
@@ -13,12 +15,26 @@ function UserForm({ onClose }: { onClose: () => void }) {
     formState: { errors },
   } = useForm<UserFormData>({
     resolver: zodResolver(userSchema),
+    defaultValues: user ?? {},
   });
 
   const onSubmit = (data: UserFormData) => {
-    mutate(data, {
-      onSuccess: () => onClose(),
-    });
+    if (user) {
+      updateUser(
+        { id: user.id, data },
+        {
+          onSuccess: () => {
+            onClose();
+          },
+        }
+      );
+    } else {
+      createUser(data, {
+        onSuccess: () => {
+          onClose();
+        },
+      });
+    }
   };
 
   return (

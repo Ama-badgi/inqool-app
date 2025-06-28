@@ -1,48 +1,24 @@
-import { useFetchAnimals } from "../../../hooks/useAnimals";
+import { useMemo, useState } from "react";
 import {
   createColumnHelper,
   getCoreRowModel,
   getFilteredRowModel,
+  getSortedRowModel,
   useReactTable,
+  type SortingState,
 } from "@tanstack/react-table";
-import type { Animal } from "../../../types/animal";
-import DataTable from "../../DataTable";
-import AnimalForm from "../../forms/AnimalForm";
-import EntityPage from "../EntityPage";
 import { TbPencil } from "react-icons/tb";
+
+import type { Animal } from "../../../types/animal";
+import { useFetchAnimals } from "../../../hooks/useAnimals";
 import { useNameFilter } from "../../../hooks/useNameFilter";
+import EntityPage from "../EntityPage";
+import AnimalForm from "../../forms/AnimalForm";
+import DataTable from "../../DataTable";
 import Filters from "../../filters/Filters";
 import NameFilter from "../../filters/NameFilter";
 
 const columnHelper = createColumnHelper<Animal>();
-const columns = [
-  columnHelper.accessor("id", {
-    header: "ID",
-  }),
-  columnHelper.accessor("name", {
-    header: "Name",
-  }),
-  columnHelper.accessor("type", {
-    header: "Type",
-  }),
-  columnHelper.accessor("age", {
-    header: "Age",
-  }),
-  columnHelper.display({
-    id: "actions",
-    header: "",
-    cell: ({ row }) => {
-      const animal = row.original;
-      return (
-        <div>
-          <button>
-            <TbPencil />
-          </button>
-        </div>
-      );
-    },
-  }),
-];
 
 function Animals() {
   const { data: animals = [], isFetching, isError, error } = useFetchAnimals();
@@ -50,20 +26,73 @@ function Animals() {
   const { nameFilter, setNameFilter, columnFilters, setColumnFilters } =
     useNameFilter();
 
+  const [editingAnimalId, setEditingAnimalId] = useState<string | null>(null);
+  const [sorting, setSorting] = useState<SortingState>([
+    { id: "name", desc: false },
+  ]);
+
+  const columns = useMemo(
+    () => [
+      columnHelper.accessor("id", {
+        header: "ID",
+      }),
+      columnHelper.accessor("name", {
+        header: "Name",
+        cell: ({ row }) =>
+          row.original.id === editingAnimalId ? null : row.original.name,
+      }),
+      columnHelper.accessor("type", {
+        header: "Type",
+        cell: ({ row }) =>
+          row.original.id === editingAnimalId ? null : row.original.type,
+      }),
+      columnHelper.accessor("age", {
+        header: "Age",
+        cell: ({ row }) =>
+          row.original.id === editingAnimalId ? null : row.original.age,
+      }),
+      columnHelper.display({
+        id: "actions",
+        header: "",
+        cell: ({ row }) => {
+          const animal = row.original;
+
+          if (editingAnimalId === animal.id) {
+            return (
+              <AnimalForm
+                animal={animal}
+                onClose={() => setEditingAnimalId(null)}
+              />
+            );
+          }
+
+          return (
+            <div>
+              <button onClick={() => setEditingAnimalId(animal.id)}>
+                <TbPencil />
+              </button>
+            </div>
+          );
+        },
+      }),
+    ],
+    [editingAnimalId]
+  );
+
   const table = useReactTable({
     data: animals,
     columns,
-    state: {
-      columnFilters,
-    },
+    state: { columnFilters, sorting },
     onColumnFiltersChange: setColumnFilters,
+    onSortingChange: setSorting,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
   });
 
   return (
     <EntityPage
-      heading="Users"
+      heading="Animals"
       FormComponent={AnimalForm}
       isFetching={isFetching}
       isError={isError}

@@ -2,10 +2,18 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { animalSchema } from "../../../schemas/animalSchema";
 import type { AnimalFormData } from "../../../schemas/animalSchema";
-import { usePostAnimal } from "../../../hooks/useAnimals";
+import type { Animal } from "../../../types/animal";
+import { usePostAnimal, usePatchAnimal } from "../../../hooks/useAnimals";
 
-function AnimalForm({ onClose }: { onClose: () => void }) {
-  const { mutate } = usePostAnimal();
+function AnimalForm({
+  onClose,
+  animal,
+}: {
+  onClose: () => void;
+  animal?: Animal;
+}) {
+  const { mutate: createAnimal } = usePostAnimal();
+  const { mutate: updateAnimal } = usePatchAnimal();
 
   const {
     register,
@@ -13,12 +21,26 @@ function AnimalForm({ onClose }: { onClose: () => void }) {
     formState: { errors },
   } = useForm<AnimalFormData>({
     resolver: zodResolver(animalSchema),
+    defaultValues: animal ?? {},
   });
 
   const onSubmit = (data: AnimalFormData) => {
-    mutate(data, {
-      onSuccess: () => onClose(),
-    });
+    if (animal) {
+      updateAnimal(
+        { id: animal.id, data },
+        {
+          onSuccess: () => {
+            onClose();
+          },
+        }
+      );
+    } else {
+      createAnimal(data, {
+        onSuccess: () => {
+          onClose();
+        },
+      });
+    }
   };
 
   return (
@@ -42,7 +64,9 @@ function AnimalForm({ onClose }: { onClose: () => void }) {
       {errors.age && <span>{errors.age.message}</span>}
 
       <button type="submit">Submit</button>
-      <button onClick={onClose}>Cancel</button>
+      <button type="button" onClick={onClose}>
+        Cancel
+      </button>
     </form>
   );
 }

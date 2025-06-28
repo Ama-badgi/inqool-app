@@ -13,3 +13,10 @@ export const postAnimal = async (formData: AnimalFormData) => {
   const response = await axiosInstance.post(ANIMALS_URL, formData);
   return response.data;
 };
+
+export const patchAnimal = (
+  id: string,
+  updatedData: Partial<AnimalFormData>
+) => {
+  return axiosInstance.patch(`${ANIMALS_URL}/${id}`, updatedData);
+};
