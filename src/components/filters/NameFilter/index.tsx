@@ -10,6 +10,7 @@ function NameFilter({ value, onChange }: NameFilterProps) {
       value={value}
       placeholder="Filter by name"
       onChange={(e) => onChange(e.target.value)}
+      autoFocus
     />
   );
 }
