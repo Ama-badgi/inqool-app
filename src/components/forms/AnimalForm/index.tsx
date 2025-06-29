@@ -45,7 +45,7 @@ function AnimalForm({
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <input {...register("name")} placeholder="Name" />
+      <input {...register("name")} placeholder="Name" autoFocus />
       {errors.name && <span>{errors.name.message}</span>}
 
       <select {...register("type")}>

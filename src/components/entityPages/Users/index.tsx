@@ -40,22 +40,13 @@ function Users() {
       }),
       columnHelper.accessor("name", {
         header: "Name",
-        cell: ({ row }) =>
-          row.original.id === editingUserId ? null : row.original.name,
       }),
       columnHelper.accessor("gender", {
         header: "Gender",
-        cell: ({ row }) =>
-          row.original.id === editingUserId ? null : row.original.gender,
       }),
       columnHelper.accessor("banned", {
         header: "Banned",
-        cell: ({ row }) =>
-          row.original.id === editingUserId
-            ? null
-            : row.original.banned
-            ? "✅ Yes"
-            : "❌ No",
+        cell: ({ row }) => (row.original.banned ? "✅ Yes" : "❌ No"),
       }),
       columnHelper.display({
         id: "actions",
@@ -64,9 +55,7 @@ function Users() {
           const user = row.original;
 
           if (editingUserId === user.id) {
-            return (
-              <UserForm user={user} onClose={() => setEditingUserId(null)} />
-            );
+            return <></>;
           }
 
           return (
@@ -113,7 +102,18 @@ function Users() {
         </Filters>
       }
     >
-      <DataTable table={table} />
+      <DataTable
+        table={table}
+        renderEditForm={(user) =>
+          editingUserId === user.id ? (
+            <tr>
+              <td colSpan={columns.length}>
+                <UserForm user={user} onClose={() => setEditingUserId(null)} />
+              </td>
+            </tr>
+          ) : null
+        }
+      />
     </EntityPage>
   );
 }

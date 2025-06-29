@@ -5,6 +5,8 @@ import type { UserFormData } from "../../../schemas/userSchema";
 import { usePatchUserDetails, usePostUser } from "../../../hooks/useUsers";
 import type { User } from "../../../types/user";
 
+import "./style.css";
+
 function UserForm({ onClose, user }: { onClose: () => void; user?: User }) {
   const { mutate: createUser } = usePostUser();
   const { mutate: updateUser } = usePatchUserDetails();
@@ -39,8 +41,7 @@ function UserForm({ onClose, user }: { onClose: () => void; user?: User }) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <input {...register("name")} placeholder="Name" />
-      {errors.name && <span>{errors.name.message}</span>}
+      <input {...register("name")} placeholder="Name" autoFocus />
 
       <select {...register("gender")}>
         <option value="">Select Gender...</option>
@@ -48,10 +49,16 @@ function UserForm({ onClose, user }: { onClose: () => void; user?: User }) {
         <option value="female">Female</option>
         <option value="other">Other</option>
       </select>
-      {errors.gender && <span>{errors.gender.message}</span>}
 
       <button type="submit">Submit</button>
       <button onClick={onClose}>Cancel</button>
+
+      {Object.keys(errors).length > 0 && (
+        <div className="form-errors">
+          {errors.name && <p>{errors.name.message}</p>}
+          {errors.gender && <p>{errors.gender.message}</p>}
+        </div>
+      )}
     </form>
   );
 }

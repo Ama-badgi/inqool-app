@@ -38,18 +38,12 @@ function Animals() {
       }),
       columnHelper.accessor("name", {
         header: "Name",
-        cell: ({ row }) =>
-          row.original.id === editingAnimalId ? null : row.original.name,
       }),
       columnHelper.accessor("type", {
         header: "Type",
-        cell: ({ row }) =>
-          row.original.id === editingAnimalId ? null : row.original.type,
       }),
       columnHelper.accessor("age", {
         header: "Age",
-        cell: ({ row }) =>
-          row.original.id === editingAnimalId ? null : row.original.age,
       }),
       columnHelper.display({
         id: "actions",
@@ -58,12 +52,7 @@ function Animals() {
           const animal = row.original;
 
           if (editingAnimalId === animal.id) {
-            return (
-              <AnimalForm
-                animal={animal}
-                onClose={() => setEditingAnimalId(null)}
-              />
-            );
+            return <></>;
           }
 
           return (
@@ -103,7 +92,21 @@ function Animals() {
         </Filters>
       }
     >
-      <DataTable table={table} />
+      <DataTable
+        table={table}
+        renderEditForm={(animal) =>
+          editingAnimalId === animal.id ? (
+            <tr>
+              <td colSpan={columns.length}>
+                <AnimalForm
+                  animal={animal}
+                  onClose={() => setEditingAnimalId(null)}
+                />
+              </td>
+            </tr>
+          ) : null
+        }
+      />
     </EntityPage>
   );
 }

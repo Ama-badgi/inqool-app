@@ -1,6 +1,8 @@
 import { useState } from "react";
 import NavigationHeader from "../../NavigationHeader";
 
+import "./style.css";
+
 type EntityPageProps = {
   heading: string;
   FormComponent: React.ComponentType<{ onClose: () => void }>;
@@ -29,20 +31,30 @@ function EntityPage({
     <>
       <NavigationHeader heading={heading} />
 
-      {isError && <p>Error: {error?.message}</p>}
-      {isFetching && <p>Loading...</p>}
+      {isError && <p className="message">Error: {error?.message}</p>}
+      {isFetching && <p className="message">Loading...</p>}
 
       {!isFetching && !isError && (
-        <>
-          <button onClick={() => setShowFilters(!showFilters)}>Filters</button>
+        <div className="entity-page">
+          <button
+            onClick={() => setShowFilters(!showFilters)}
+            className="entity-page__filters-button"
+          >
+            Filters
+          </button>
           {showFilters && filters}
           {children}
           {showForm ? (
             <FormComponent onClose={() => setShowForm(false)} />
           ) : (
-            <button onClick={() => setShowForm(true)}>+</button>
+            <button
+              onClick={() => setShowForm(true)}
+              className="entity-page__add-entity-button"
+            >
+              +
+            </button>
           )}
-        </>
+        </div>
       )}
     </>
   );

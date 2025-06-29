@@ -1,0 +1,43 @@
+.message {
+  width: 50vw;
+}
+
+.entity-page {
+  width: 50vw;
+  justify-content: center;
+  align-content: center;
+  padding-bottom: 1rem;
+
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.entity-page button {
+  width: fit-content;
+  background-color: inherit;
+  justify-self: center;
+  align-self: center;
+  border-radius: 5px;
+  font-size: medium;
+}
+
+.entity-page button:hover {
+  cursor: pointer;
+}
+
+.entity-page input {
+  color: inherit;
+  font-size: medium;
+  background-color: inherit;
+  max-width: 600px;
+  border-radius: 5px;
+  align-self: center;
+}
+
+.entity-page select {
+  color: inherit;
+  font-size: medium;
+  background-color: inherit;
+  border-radius: 5px;
+}
