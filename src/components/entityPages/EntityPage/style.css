@@ -1,7 +1,3 @@
-.message {
-  width: 50vw;
-}
-
 .entity-page {
   width: 50vw;
   justify-content: center;
@@ -11,6 +7,15 @@
   display: flex;
   flex-direction: column;
   overflow: hidden;
+}
+
+.entity-page__message {
+  text-align: center;
+}
+
+.entity-page__filters {
+  display: flex;
+  justify-content: center;
 }
 
 .entity-page button {

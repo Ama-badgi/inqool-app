@@ -1,6 +1,5 @@
-import "./App.css";
 import { BrowserRouter, Route, Routes } from "react-router";
-import Home from "./Home";
+import Home from "./components/Home";
 import Users from "./components/entityPages/Users";
 import Animals from "./components/entityPages/Animals";
 

@@ -28,21 +28,23 @@ function EntityPage({
   const [showFilters, setShowFilters] = useState(false);
 
   return (
-    <>
+    <div className="entity-page">
       <NavigationHeader heading={heading} />
 
-      {isError && <p className="message">Error: {error?.message}</p>}
-      {isFetching && <p className="message">Loading...</p>}
+      {isError && (
+        <p className="entity-page__message">Error: {error?.message}</p>
+      )}
+      {isFetching && <p className="entity-page__message">Loading...</p>}
 
       {!isFetching && !isError && (
-        <div className="entity-page">
+        <>
           <button
             onClick={() => setShowFilters(!showFilters)}
             className="entity-page__filters-button"
           >
             Filters
           </button>
-          {showFilters && filters}
+          {showFilters && <div className="entity-page__filters">{filters}</div>}
           {children}
           {showForm ? (
             <FormComponent onClose={() => setShowForm(false)} />
@@ -54,9 +56,9 @@ function EntityPage({
               +
             </button>
           )}
-        </div>
+        </>
       )}
-    </>
+    </div>
   );
 }
 

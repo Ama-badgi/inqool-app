@@ -1,4 +1,9 @@
-form {
+.form {
+ display: flex;
+ flex-direction: column;
+}
+
+.form__body {
   display: flex;
   justify-content: flex-end;
   flex-wrap: wrap;
@@ -6,7 +11,12 @@ form {
 }
 
 .form-errors {
+  left: 0;
   display: flex;
   flex-direction: column;
   color: #f44336;
+}
+
+.form-errors p {
+  margin: 0;
 }

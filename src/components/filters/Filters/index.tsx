@@ -3,7 +3,7 @@ type FiltersProps = {
 };
 
 function Filters({ children }: FiltersProps) {
-  return <>{children}</>;
+  return <div>{children}</div>;
 }
 
 export default Filters;
