@@ -1,5 +1,9 @@
 # InQool Frontend Interview
 
+## Instructions for running
+
+Run using `npm run dev`.
+
 ## Introduction
 
 You are given a simple REST API and asked to create a web application. The API is a simple REST API with two entities - **user** and **animal**. You need to create a web application to interact with these entities.
